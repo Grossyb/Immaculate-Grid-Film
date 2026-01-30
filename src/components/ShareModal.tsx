@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { track } from '@vercel/analytics'
 import type { Movie, GameScore } from '../lib/types'
 import { generateShareText } from '../lib/game-logic'
 import { getTodayDateString } from '../lib/grid-generator'
@@ -25,6 +26,7 @@ export function ShareModal({ grid, score, onClose }: ShareModalProps) {
   }
 
   const handleShare = async () => {
+    track('share_clicked', { score: score.correct, rarity: score.rarity })
     if (navigator.share) {
       try {
         await navigator.share({ text: shareText })
