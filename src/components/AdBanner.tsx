@@ -18,7 +18,7 @@ export function AdBanner() {
   }, [])
 
   return (
-    <div className="w-full max-w-3xl mx-auto mt-8 mb-4">
+    <div className="w-full max-w-3xl mx-auto py-2">
       <ins
         className="adsbygoogle"
         style={{ display: 'block' }}

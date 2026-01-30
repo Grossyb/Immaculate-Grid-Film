@@ -54,19 +54,18 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center p-4">
-      <header className="mb-6 text-center">
-        <h1 className="text-3xl font-bold mb-1">Immaculate Grid</h1>
-        <p className="text-sm text-gray-500 mb-2">Movies Edition</p>
-        <p className="text-lg font-semibold text-blue-400">#{getPuzzleNumber()}</p>
-        <p className="text-gray-400 text-sm mt-1">A new puzzle every day. Find movies connecting the actors.</p>
+    <div className="h-screen flex flex-col items-center p-2 sm:p-4 overflow-hidden">
+      <header className="mb-2 sm:mb-4 text-center">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-1">Immaculate Grid</h1>
+        <p className="text-xs sm:text-sm text-gray-500">Movies Edition · #{getPuzzleNumber()}</p>
+        <p className="text-gray-400 text-xs mt-1 hidden sm:block">A new puzzle every day. Find movies connecting the actors.</p>
       </header>
 
-      <div className="flex gap-4 mb-4">
+      <div className="flex gap-4 mb-2 sm:mb-4">
         <GuessCounter remaining={guessesRemaining} />
         <button
           onClick={() => setShowStats(true)}
-          className="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600"
+          className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-700 rounded hover:bg-gray-600 text-sm sm:text-base"
         >
           Stats
         </button>
@@ -115,7 +114,9 @@ function App() {
         />
       )}
 
-      <AdBanner />
+      <div className="mt-auto w-full">
+        <AdBanner />
+      </div>
     </div>
   )
 }
