@@ -57,8 +57,8 @@ function App() {
   return (
     <div className="h-screen flex flex-col items-center p-2 sm:p-4 overflow-hidden">
       <header className="mb-2 sm:mb-4 text-center">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-1">Immaculate Grid</h1>
-        <p className="text-xs sm:text-sm text-gray-500">Movies Edition · #{getPuzzleNumber()}</p>
+        <h1 className="text-2xl sm:text-3xl font-bold mb-1">Immaculate Grid #{getPuzzleNumber()}</h1>
+        <p className="text-xs sm:text-sm text-gray-500">Movies Edition</p>
         <p className="text-gray-400 text-xs mt-1 hidden sm:block">A new puzzle every day. Find movies connecting the actors.</p>
       </header>
 
