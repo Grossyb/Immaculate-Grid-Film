@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" rx="15" fill="#1f2937"/>
+  <g fill="#10b981">
+    <!-- 3x3 grid representing the game -->
+    <rect x="12" y="12" width="22" height="22" rx="4"/>
+    <rect x="39" y="12" width="22" height="22" rx="4"/>
+    <rect x="66" y="12" width="22" height="22" rx="4"/>
+    <rect x="12" y="39" width="22" height="22" rx="4"/>
+    <rect x="39" y="39" width="22" height="22" rx="4" fill="#3b82f6"/>
+    <rect x="66" y="39" width="22" height="22" rx="4"/>
+    <rect x="12" y="66" width="22" height="22" rx="4"/>
+    <rect x="39" y="66" width="22" height="22" rx="4"/>
+    <rect x="66" y="66" width="22" height="22" rx="4" fill="#6b7280"/>
+  </g>
+</svg>
