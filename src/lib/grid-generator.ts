@@ -62,6 +62,15 @@ export function getPuzzleNumber(dateString?: string): number {
   return Math.max(1, diffDays + 1)
 }
 
+// Progressive difficulty: start with most connected actors, expand pool over time
+function getActorPoolSize(puzzleNumber: number): number {
+  if (puzzleNumber <= 7) return 30      // Week 1: easiest
+  if (puzzleNumber <= 14) return 60     // Week 2
+  if (puzzleNumber <= 30) return 100    // Month 1
+  if (puzzleNumber <= 60) return 150    // Month 2
+  return data.actors.length             // After 2 months: full pool
+}
+
 export function getSharedMovies(actor1Id: number, actor2Id: number): number[] {
   const movies1 = new Set(data.actorMovies[actor1Id] || [])
   const movies2 = data.actorMovies[actor2Id] || []
@@ -93,11 +102,13 @@ function findConnectedToAll(actors: Actor[], candidates: Actor[]): Actor[] {
 
 export function generateDailyGrid(dateOverride?: string): DailyGrid {
   const date = dateOverride || getTodayDateString()
+  const puzzleNum = getPuzzleNumber(date)
   const seed = hashString(date)
   const random = createSeededRandom(seed)
 
-  // Use well-connected actors as our pool (top 100)
-  const actorPool = actorsByConnections.slice(0, 100)
+  // Progressive difficulty: use more actors as puzzles progress
+  const poolSize = getActorPoolSize(puzzleNum)
+  const actorPool = actorsByConnections.slice(0, poolSize)
   const shuffled = shuffleArray([...actorPool], random)
 
   // Strategy: Build the grid incrementally
