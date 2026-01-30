@@ -33,13 +33,32 @@ export function getTodayDateString(): string {
   return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
 }
 
-// Launch date - puzzle #1 starts here
-const LAUNCH_DATE = new Date('2026-01-29')
+// Launch date - puzzle #1 starts here (year, month-1, day)
+const LAUNCH_YEAR = 2026
+const LAUNCH_MONTH = 1  // January (1-indexed for clarity)
+const LAUNCH_DAY = 29
 
 export function getPuzzleNumber(dateString?: string): number {
-  const date = dateString ? new Date(dateString) : new Date()
-  const diffTime = date.getTime() - LAUNCH_DATE.getTime()
+  let year: number, month: number, day: number
+
+  if (dateString) {
+    const [y, m, d] = dateString.split('-').map(Number)
+    year = y
+    month = m
+    day = d
+  } else {
+    const now = new Date()
+    year = now.getFullYear()
+    month = now.getMonth() + 1
+    day = now.getDate()
+  }
+
+  // Calculate days since launch using local dates only
+  const launchDate = new Date(LAUNCH_YEAR, LAUNCH_MONTH - 1, LAUNCH_DAY)
+  const currentDate = new Date(year, month - 1, day)
+  const diffTime = currentDate.getTime() - launchDate.getTime()
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
+
   return Math.max(1, diffDays + 1)
 }
 
