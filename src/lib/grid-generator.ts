@@ -34,7 +34,7 @@ export function getTodayDateString(): string {
 }
 
 // Launch date - puzzle #1 starts here
-const LAUNCH_DATE = new Date('2025-01-30')
+const LAUNCH_DATE = new Date('2026-01-29')
 
 export function getPuzzleNumber(dateString?: string): number {
   const date = dateString ? new Date(dateString) : new Date()
