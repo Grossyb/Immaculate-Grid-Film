@@ -21,6 +21,13 @@ for (const actor1 of data.actors) {
   }
 }
 
+// Sort actors by number of connections (most connected first)
+const actorsByConnections = [...data.actors].sort((a, b) => {
+  const aConns = connectionMap.get(a.id)?.size ?? 0
+  const bConns = connectionMap.get(b.id)?.size ?? 0
+  return bConns - aConns
+})
+
 export function getTodayDateString(): string {
   const today = new Date()
   return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
@@ -36,7 +43,6 @@ function areConnected(actor1Id: number, actor2Id: number): boolean {
   return connectionMap.get(actor1Id)?.has(actor2Id) ?? false
 }
 
-// Check if all row actors share at least one movie with all col actors
 export function isValidGrid(rowActors: Actor[], colActors: Actor[]): boolean {
   for (const rowActor of rowActors) {
     for (const colActor of colActors) {
@@ -48,60 +54,102 @@ export function isValidGrid(rowActors: Actor[], colActors: Actor[]): boolean {
   return true
 }
 
+// Find actors that are connected to ALL actors in a given list
+function findConnectedToAll(actors: Actor[], candidates: Actor[]): Actor[] {
+  return candidates.filter(candidate => {
+    if (actors.some(a => a.id === candidate.id)) return false
+    return actors.every(a => areConnected(candidate.id, a.id))
+  })
+}
+
 export function generateDailyGrid(dateOverride?: string): DailyGrid {
   const date = dateOverride || getTodayDateString()
   const seed = hashString(date)
   const random = createSeededRandom(seed)
 
-  // Shuffle ALL actors for variety (not just most connected)
-  const shuffled = shuffleArray([...data.actors], random)
+  // Use well-connected actors as our pool (top 100)
+  const actorPool = actorsByConnections.slice(0, 100)
+  const shuffled = shuffleArray([...actorPool], random)
 
-  // Try many random combinations
-  for (let attempt = 0; attempt < 2000; attempt++) {
-    // Pick 6 random actors
-    const indices: number[] = []
-    while (indices.length < 6) {
-      const idx = Math.floor(random() * shuffled.length)
-      if (!indices.includes(idx)) {
-        indices.push(idx)
-      }
+  // Strategy: Build the grid incrementally
+  // 1. Pick first row actor
+  // 2. Find actors connected to first row actor, pick 2 more for columns
+  // 3. Find actors connected to ALL column actors for remaining rows
+
+  for (let attempt = 0; attempt < 500; attempt++) {
+    // Reshuffle periodically for variety
+    if (attempt > 0 && attempt % 50 === 0) {
+      shuffleArray(shuffled, random)
     }
-    const selected = indices.map(i => shuffled[i])
 
-    // Try different ways to split into rows and columns
-    const rowActors = selected.slice(0, 3)
-    const colActors = selected.slice(3, 6)
+    // Pick a random starting actor for row 1
+    const startIdx = Math.floor(random() * shuffled.length)
+    const rowActor1 = shuffled[startIdx]
+
+    // Find actors connected to rowActor1 for columns
+    const connectedToRow1 = shuffled.filter(a =>
+      a.id !== rowActor1.id && areConnected(rowActor1.id, a.id)
+    )
+
+    if (connectedToRow1.length < 3) continue
+
+    // Pick 3 column actors from those connected to row1
+    const colCandidates = shuffleArray([...connectedToRow1], random).slice(0, 3)
+    if (colCandidates.length < 3) continue
+
+    const colActors = colCandidates
+
+    // Now find 2 more row actors that connect to ALL 3 column actors
+    const rowCandidates = findConnectedToAll(colActors, shuffled)
+      .filter(a => a.id !== rowActor1.id)
+
+    if (rowCandidates.length < 2) continue
+
+    const otherRows = shuffleArray([...rowCandidates], random).slice(0, 2)
+    const rowActors = [rowActor1, ...otherRows]
 
     if (isValidGrid(rowActors, colActors)) {
       return { rowActors, colActors, date }
     }
-
-    // Also try the reverse split
-    if (isValidGrid(colActors, rowActors)) {
-      return { rowActors: colActors, colActors: rowActors, date }
-    }
   }
 
-  // Fallback: find ANY valid combination by brute force
-  // Pick actors with at least some connections
-  const connectedActors = data.actors.filter(a => (connectionMap.get(a.id)?.size ?? 0) >= 3)
-  const fallbackShuffled = shuffleArray(connectedActors, random)
+  // Fallback: Use known-good highly connected actors
+  // These are guaranteed to have many shared movies
+  const fallbackNames = [
+    ['Matt Damon', 'Brad Pitt', 'Robert Downey Jr.'],
+    ['Samuel L. Jackson', 'Chris Evans', 'Scarlett Johansson']
+  ]
 
-  for (let i = 0; i < Math.min(fallbackShuffled.length, 30); i++) {
-    for (let j = i + 1; j < Math.min(fallbackShuffled.length, 30); j++) {
-      for (let k = j + 1; k < Math.min(fallbackShuffled.length, 30); k++) {
-        const rowActors = [fallbackShuffled[i], fallbackShuffled[j], fallbackShuffled[k]]
+  const fallbackRows = fallbackNames[0]
+    .map(name => data.actors.find(a => a.name === name))
+    .filter((a): a is Actor => a !== undefined)
 
-        for (let a = 0; a < Math.min(fallbackShuffled.length, 30); a++) {
+  const fallbackCols = fallbackNames[1]
+    .map(name => data.actors.find(a => a.name === name))
+    .filter((a): a is Actor => a !== undefined)
+
+  if (fallbackRows.length === 3 && fallbackCols.length === 3 && isValidGrid(fallbackRows, fallbackCols)) {
+    // Shuffle the fallback based on date for some variety
+    const shuffledRows = shuffleArray([...fallbackRows], random)
+    const shuffledCols = shuffleArray([...fallbackCols], random)
+    return { rowActors: shuffledRows, colActors: shuffledCols, date }
+  }
+
+  // Last resort: brute force search through most connected actors
+  const topActors = actorsByConnections.slice(0, 30)
+  for (let i = 0; i < topActors.length; i++) {
+    for (let j = i + 1; j < topActors.length; j++) {
+      for (let k = j + 1; k < topActors.length; k++) {
+        const rows = [topActors[i], topActors[j], topActors[k]]
+        for (let a = 0; a < topActors.length; a++) {
           if (a === i || a === j || a === k) continue
-          for (let b = a + 1; b < Math.min(fallbackShuffled.length, 30); b++) {
+          for (let b = a + 1; b < topActors.length; b++) {
             if (b === i || b === j || b === k) continue
-            for (let c = b + 1; c < Math.min(fallbackShuffled.length, 30); c++) {
+            for (let c = b + 1; c < topActors.length; c++) {
               if (c === i || c === j || c === k) continue
-              const colActors = [fallbackShuffled[a], fallbackShuffled[b], fallbackShuffled[c]]
-
-              if (isValidGrid(rowActors, colActors)) {
-                return { rowActors, colActors, date }
+              const cols = [topActors[a], topActors[b], topActors[c]]
+              if (isValidGrid(rows, cols)) {
+                return { rowActors: rows, colActors: cols, date }
               }
             }
           }
@@ -110,7 +158,8 @@ export function generateDailyGrid(dateOverride?: string): DailyGrid {
     }
   }
 
-  // Last resort
+  // This should never happen with good data
+  console.error('Could not generate valid grid!')
   return {
     rowActors: data.actors.slice(0, 3),
     colActors: data.actors.slice(3, 6),
