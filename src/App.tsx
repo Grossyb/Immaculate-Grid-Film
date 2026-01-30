@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import { Grid } from './components/Grid'
 import { MovieSearch } from './components/MovieSearch'
 import { GuessCounter } from './components/GuessCounter'
@@ -117,6 +118,8 @@ function App() {
       <div className="mt-auto w-full">
         <AdBanner />
       </div>
+
+      <Analytics />
     </div>
   )
 }
