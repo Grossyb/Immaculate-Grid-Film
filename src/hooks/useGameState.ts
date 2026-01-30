@@ -44,6 +44,29 @@ export function useGameState(dailyGrid: DailyGrid) {
 
   const [selectedCell, setSelectedCell] = useState<[number, number] | null>(null)
 
+  // Reset state when savedState changes (e.g., new day started)
+  useEffect(() => {
+    if (savedState) {
+      setState({
+        grid: savedState.grid.map(row =>
+          row.map(id => (id ? getMovieById(id) || null : null))
+        ),
+        usedMovies: new Set(savedState.usedMovies),
+        guessesRemaining: savedState.guessesRemaining,
+        isComplete: savedState.guessesRemaining === 0 ||
+          savedState.grid.every(row => row.every(cell => cell !== null)),
+      })
+    } else {
+      setState({
+        grid: [[null, null, null], [null, null, null], [null, null, null]],
+        usedMovies: new Set(),
+        guessesRemaining: INITIAL_GUESSES,
+        isComplete: false,
+      })
+    }
+    setSelectedCell(null)
+  }, [storageKey])
+
   // Save state changes to localStorage
   useEffect(() => {
     setSavedState({
