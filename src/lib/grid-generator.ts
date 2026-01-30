@@ -28,6 +28,57 @@ const actorsByConnections = [...data.actors].sort((a, b) => {
   return bConns - aConns
 })
 
+// MCU movie IDs - used to limit MCU-heavy grids
+const MCU_MOVIE_IDS = new Set([
+  10138,  // Iron Man
+  1726,   // Iron Man 2
+  68721,  // Iron Man 3
+  10195,  // Thor
+  76338,  // Thor: The Dark World
+  284053, // Thor: Ragnarok
+  616037, // Thor: Love and Thunder
+  1771,   // Captain America: The First Avenger
+  100402, // Captain America: The Winter Soldier
+  271110, // Captain America: Civil War
+  24428,  // The Avengers
+  99861,  // Avengers: Age of Ultron
+  299536, // Avengers: Infinity War
+  299534, // Avengers: Endgame
+  118340, // Guardians of the Galaxy
+  283995, // Guardians of the Galaxy Vol. 2
+  447365, // Guardians of the Galaxy Vol. 3
+  299537, // Captain Marvel
+  505642, // Black Panther
+  284054, // Black Panther: Wakanda Forever
+  429617, // Spider-Man: Homecoming
+  315635, // Spider-Man: Homecoming (alt)
+  634649, // Spider-Man: No Way Home
+  497698, // Black Widow
+  566525, // Shang-Chi
+  524434, // Eternals
+  453395, // Doctor Strange
+  284052, // Doctor Strange in the Multiverse of Madness
+  533535, // Deadpool & Wolverine
+])
+
+// Check how many MCU movies an actor has been in
+function getMcuMovieCount(actorId: number): number {
+  const actorMovies = data.actorMovies[actorId] || []
+  return actorMovies.filter(id => MCU_MOVIE_IDS.has(id)).length
+}
+
+// Actor is "MCU-heavy" if they're in 3+ MCU movies
+function isMcuHeavy(actor: Actor): boolean {
+  return getMcuMovieCount(actor.id) >= 3
+}
+
+// Count MCU-heavy actors in a list
+function countMcuHeavyActors(actors: Actor[]): number {
+  return actors.filter(isMcuHeavy).length
+}
+
+const MAX_MCU_ACTORS_PER_GRID = 2
+
 export function getTodayDateString(): string {
   const today = new Date()
   return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
@@ -149,7 +200,11 @@ export function generateDailyGrid(dateOverride?: string): DailyGrid {
     const rowActors = [rowActor1, ...otherRows]
 
     if (isValidGrid(rowActors, colActors)) {
-      return { rowActors, colActors, date }
+      // Limit MCU-heavy actors to keep puzzles varied
+      const allActors = [...rowActors, ...colActors]
+      if (countMcuHeavyActors(allActors) <= MAX_MCU_ACTORS_PER_GRID) {
+        return { rowActors, colActors, date }
+      }
     }
   }
 
