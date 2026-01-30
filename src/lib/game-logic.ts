@@ -28,5 +28,5 @@ ${emojiGrid}
 Score: ${score.correct}/9
 Rarity: ${score.rarity}
 
-Play at: [your-url-here]`
+Play at: https://immaculate-grid-film.vercel.app`
 }
