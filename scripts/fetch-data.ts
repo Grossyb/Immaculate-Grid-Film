@@ -5,7 +5,12 @@ import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const API_KEY = 'd9dad89e15708720372c55bb540f9263'
+const API_KEY = process.env.TMDB_API_KEY || ''
+if (!API_KEY) {
+  console.error('Error: TMDB_API_KEY environment variable is required')
+  console.error('Run: TMDB_API_KEY=your_key npx tsx scripts/fetch-data.ts')
+  process.exit(1)
+}
 const BASE_URL = 'https://api.themoviedb.org/3'
 
 interface TmdbActor {
