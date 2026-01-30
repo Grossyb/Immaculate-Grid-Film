@@ -4,7 +4,7 @@ import { MovieSearch } from './components/MovieSearch'
 import { GuessCounter } from './components/GuessCounter'
 import { ShareModal } from './components/ShareModal'
 import { StatsModal } from './components/StatsModal'
-import { generateDailyGrid } from './lib/grid-generator'
+import { generateDailyGrid, getPuzzleNumber } from './lib/grid-generator'
 import { useGameState } from './hooks/useGameState'
 import { useLocalStorage } from './hooks/useLocalStorage'
 import type { Movie } from './lib/types'
@@ -55,8 +55,10 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col items-center p-4">
       <header className="mb-6 text-center">
-        <h1 className="text-3xl font-bold mb-2">Immaculate Grid</h1>
-        <p className="text-gray-400">Find movies connecting the actors</p>
+        <h1 className="text-3xl font-bold mb-1">Immaculate Grid</h1>
+        <p className="text-sm text-gray-500 mb-2">Movies Edition</p>
+        <p className="text-lg font-semibold text-blue-400">#{getPuzzleNumber()}</p>
+        <p className="text-gray-400 text-sm mt-1">A new puzzle every day. Find movies connecting the actors.</p>
       </header>
 
       <div className="flex gap-4 mb-4">

@@ -33,6 +33,16 @@ export function getTodayDateString(): string {
   return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
 }
 
+// Launch date - puzzle #1 starts here
+const LAUNCH_DATE = new Date('2025-01-30')
+
+export function getPuzzleNumber(dateString?: string): number {
+  const date = dateString ? new Date(dateString) : new Date()
+  const diffTime = date.getTime() - LAUNCH_DATE.getTime()
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
+  return Math.max(1, diffDays + 1)
+}
+
 export function getSharedMovies(actor1Id: number, actor2Id: number): number[] {
   const movies1 = new Set(data.actorMovies[actor1Id] || [])
   const movies2 = data.actorMovies[actor2Id] || []

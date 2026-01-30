@@ -1,4 +1,5 @@
 import type { Movie } from './types'
+import { getPuzzleNumber } from './grid-generator'
 
 export function calculateRarity(popularity: number): number {
   // Lower popularity = higher rarity score
@@ -14,19 +15,19 @@ export function generateShareText(
   score: { correct: number; rarity: number },
   date: string
 ): string {
+  const puzzleNumber = getPuzzleNumber(date)
   const emojiGrid = grid
     .map(row =>
       row.map(cell => (cell ? '🟩' : '🟥')).join('')
     )
     .join('\n')
 
-  return `Immaculate Grid - Movies 🎬
-${date}
+  return `Immaculate Grid: Movies #${puzzleNumber} 🎬
 
 ${emojiGrid}
 
 Score: ${score.correct}/9
 Rarity: ${score.rarity}
 
-Play at: https://immaculate-grid-film.vercel.app`
+https://immaculate-grid-film.vercel.app`
 }
