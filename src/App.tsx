@@ -4,6 +4,7 @@ import { MovieSearch } from './components/MovieSearch'
 import { GuessCounter } from './components/GuessCounter'
 import { ShareModal } from './components/ShareModal'
 import { StatsModal } from './components/StatsModal'
+import { AdBanner } from './components/AdBanner'
 import { generateDailyGrid, getPuzzleNumber } from './lib/grid-generator'
 import { useGameState } from './hooks/useGameState'
 import { useLocalStorage } from './hooks/useLocalStorage'
@@ -113,6 +114,8 @@ function App() {
           onClose={() => setShowStats(false)}
         />
       )}
+
+      <AdBanner />
     </div>
   )
 }
