@@ -1,17 +1,41 @@
 import { useState, useEffect, useCallback } from 'react'
 import type { Movie, DailyGrid, GameScore } from '../lib/types'
-import { getSharedMovies, getMovieById } from '../lib/grid-generator'
+import { getSharedMovies, getMovieById, movieData } from '../lib/grid-generator'
 import { calculateRarity } from '../lib/game-logic'
 import { useLocalStorage } from './useLocalStorage'
+
+export interface CellHint {
+  movieId: number
+  level: number // 1 = year, 2 = year + actor, 3 = year + actor + hangman
+  year: number
+  actorName: string
+  hangman: string
+}
 
 interface GameState {
   grid: (Movie | null)[][]
   usedMovies: Set<number>
   guessesRemaining: number
+  cellHints: Record<string, CellHint>
   isComplete: boolean
 }
 
 const INITIAL_GUESSES = 9
+
+function generateHangmanHint(title: string): string {
+  return title
+    .split(' ')
+    .map(word => {
+      if (word.length === 0) return ''
+      return word[0] + '_'.repeat(word.length - 1)
+    })
+    .join(' ')
+}
+
+function getActorName(actorId: number): string {
+  const actor = movieData.actors.find(a => a.id === actorId)
+  return actor?.name || 'Unknown'
+}
 
 export function useGameState(dailyGrid: DailyGrid) {
   const storageKey = `immaculate-grid-game-${dailyGrid.date}`
@@ -20,6 +44,7 @@ export function useGameState(dailyGrid: DailyGrid) {
     grid: (number | null)[][]
     usedMovies: number[]
     guessesRemaining: number
+    cellHints?: Record<string, CellHint>
   } | null>(storageKey, null)
 
   const [state, setState] = useState<GameState>(() => {
@@ -30,6 +55,7 @@ export function useGameState(dailyGrid: DailyGrid) {
         ),
         usedMovies: new Set(savedState.usedMovies),
         guessesRemaining: savedState.guessesRemaining,
+        cellHints: savedState.cellHints || {},
         isComplete: savedState.guessesRemaining === 0 ||
           savedState.grid.every(row => row.every(cell => cell !== null)),
       }
@@ -38,6 +64,7 @@ export function useGameState(dailyGrid: DailyGrid) {
       grid: [[null, null, null], [null, null, null], [null, null, null]],
       usedMovies: new Set(),
       guessesRemaining: INITIAL_GUESSES,
+      cellHints: {},
       isComplete: false,
     }
   })
@@ -53,6 +80,7 @@ export function useGameState(dailyGrid: DailyGrid) {
         ),
         usedMovies: new Set(savedState.usedMovies),
         guessesRemaining: savedState.guessesRemaining,
+        cellHints: savedState.cellHints || {},
         isComplete: savedState.guessesRemaining === 0 ||
           savedState.grid.every(row => row.every(cell => cell !== null)),
       })
@@ -61,6 +89,7 @@ export function useGameState(dailyGrid: DailyGrid) {
         grid: [[null, null, null], [null, null, null], [null, null, null]],
         usedMovies: new Set(),
         guessesRemaining: INITIAL_GUESSES,
+        cellHints: {},
         isComplete: false,
       })
     }
@@ -73,6 +102,7 @@ export function useGameState(dailyGrid: DailyGrid) {
       grid: state.grid.map(row => row.map(movie => movie?.id || null)),
       usedMovies: Array.from(state.usedMovies),
       guessesRemaining: state.guessesRemaining,
+      cellHints: state.cellHints,
     })
   }, [state, setSavedState])
 
@@ -91,6 +121,54 @@ export function useGameState(dailyGrid: DailyGrid) {
       .filter((m): m is Movie => m !== undefined && !state.usedMovies.has(m.id))
       .sort((a, b) => b.popularity - a.popularity)
   }, [dailyGrid, state.usedMovies])
+
+  const useHint = useCallback(() => {
+    if (!selectedCell || state.isComplete) return
+
+    const [row, col] = selectedCell
+    const cellKey = `${row}-${col}`
+    const existingHint = state.cellHints[cellKey]
+
+    // Already at max hints (level 3)
+    if (existingHint && existingHint.level >= 3) return
+
+    const rowActor = dailyGrid.rowActors[row]
+    const colActor = dailyGrid.colActors[col]
+
+    // Get valid movies for this cell
+    const validMovieIds = getSharedMovies(rowActor.id, colActor.id)
+      .filter(id => !state.usedMovies.has(id))
+
+    if (validMovieIds.length === 0) return
+
+    // Use the existing hint's movie or pick the first valid one
+    const movieId = existingHint?.movieId || validMovieIds[0]
+    const movie = getMovieById(movieId)
+    if (!movie) return
+
+    // Find another actor from this movie (not the row or col actor)
+    const movieActorIds = movieData.movieActors[movieId] || []
+    const otherActorId = movieActorIds.find(
+      id => id !== rowActor.id && id !== colActor.id
+    )
+    const otherActorName = otherActorId ? getActorName(otherActorId) : 'Another actor'
+
+    const newLevel = existingHint ? existingHint.level + 1 : 1
+
+    setState(prev => ({
+      ...prev,
+      cellHints: {
+        ...prev.cellHints,
+        [cellKey]: {
+          movieId,
+          level: newLevel,
+          year: movie.releaseYear,
+          actorName: otherActorName,
+          hangman: generateHangmanHint(movie.title),
+        },
+      },
+    }))
+  }, [selectedCell, dailyGrid, state.isComplete, state.cellHints, state.usedMovies])
 
   const makeGuess = useCallback((movie: Movie) => {
     if (!selectedCell || state.isComplete) return
@@ -118,6 +196,7 @@ export function useGameState(dailyGrid: DailyGrid) {
       const noGuesses = newGuesses === 0
 
       return {
+        ...prev,
         grid: newGrid,
         usedMovies: newUsedMovies,
         guessesRemaining: newGuesses,
@@ -136,6 +215,11 @@ export function useGameState(dailyGrid: DailyGrid) {
       .reduce((sum, m) => sum + calculateRarity(m.popularity), 0),
   }
 
+  // Get current cell hint
+  const currentCellHint = selectedCell
+    ? state.cellHints[`${selectedCell[0]}-${selectedCell[1]}`] || null
+    : null
+
   return {
     grid: state.grid,
     selectedCell,
@@ -145,5 +229,7 @@ export function useGameState(dailyGrid: DailyGrid) {
     selectCell,
     makeGuess,
     getValidMoviesForCell,
+    useHint,
+    currentCellHint,
   }
 }

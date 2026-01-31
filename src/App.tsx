@@ -24,6 +24,8 @@ function App() {
     score,
     selectCell,
     makeGuess,
+    useHint,
+    currentCellHint,
   } = useGameState(dailyGrid)
 
   const [stats, setStats] = useLocalStorage('immaculate-grid-stats', {
@@ -86,6 +88,8 @@ function App() {
           onSelect={handleMovieSelect}
           rowActor={dailyGrid.rowActors[selectedCell[0]]}
           colActor={dailyGrid.colActors[selectedCell[1]]}
+          onUseHint={useHint}
+          cellHint={currentCellHint}
         />
       )}
 

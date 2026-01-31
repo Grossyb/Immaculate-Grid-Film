@@ -1,16 +1,19 @@
 import { useState, useMemo } from 'react'
 import type { Actor, Movie } from '../lib/types'
+import type { CellHint } from '../hooks/useGameState'
 import { movieData } from '../lib/grid-generator'
 
 interface MovieSearchProps {
   onSelect: (movie: Movie) => void
   rowActor: Actor
   colActor: Actor
+  onUseHint: () => void
+  cellHint: CellHint | null
 }
 
 const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p/w92'
 
-export function MovieSearch({ onSelect, rowActor, colActor }: MovieSearchProps) {
+export function MovieSearch({ onSelect, rowActor, colActor, onUseHint, cellHint }: MovieSearchProps) {
   const [query, setQuery] = useState('')
 
   // Search ALL movies based on user input
@@ -24,12 +27,50 @@ export function MovieSearch({ onSelect, rowActor, colActor }: MovieSearchProps) 
       .slice(0, 8)
   }, [query])
 
+  const hintsUsed = cellHint?.level || 0
+  const hintsRemaining = 3 - hintsUsed
+
   return (
     <div className="mt-6 w-full max-w-md">
       <p className="text-sm text-gray-400 mb-2 text-center">
         Name a movie with <span className="text-white font-semibold">{rowActor.name}</span> and{' '}
         <span className="text-white font-semibold">{colActor.name}</span>
       </p>
+
+      {/* Hint Display */}
+      {cellHint && (
+        <div className="mb-3 p-3 bg-gray-800 rounded-lg border border-yellow-600">
+          <div className="text-yellow-400 text-sm font-semibold mb-1">Hints:</div>
+          <div className="space-y-1 text-sm">
+            {cellHint.level >= 1 && (
+              <p className="text-gray-300">
+                <span className="text-yellow-500">Year:</span> {cellHint.year}
+              </p>
+            )}
+            {cellHint.level >= 2 && (
+              <p className="text-gray-300">
+                <span className="text-yellow-500">Also stars:</span> {cellHint.actorName}
+              </p>
+            )}
+            {cellHint.level >= 3 && (
+              <p className="text-gray-300 font-mono tracking-wider">
+                <span className="text-yellow-500">Title:</span> {cellHint.hangman}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Hint Button */}
+      {hintsRemaining > 0 && (
+        <button
+          onClick={onUseHint}
+          className="w-full mb-3 px-4 py-2 bg-yellow-600 hover:bg-yellow-500
+                     rounded-lg font-medium text-black transition-colors"
+        >
+          Use Hint ({hintsRemaining} remaining)
+        </button>
+      )}
 
       <input
         type="text"
