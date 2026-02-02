@@ -15,37 +15,44 @@ export function StatsModal({ stats, onClose }: StatsModalProps) {
     : 0
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
-      <div className="bg-gray-800 rounded-xl p-6 max-w-sm w-full">
-        <h2 className="text-xl font-bold mb-6 text-center">Statistics</h2>
+    <div
+      className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+      onClick={onClose}
+    >
+      <div
+        className="bg-[#141414] rounded-xl p-6 max-w-xs w-full border border-white/[0.08]"
+        onClick={e => e.stopPropagation()}
+      >
+        <h2 className="text-xl font-semibold text-[#e5e5e5] text-center mb-1">Co-Stars</h2>
+        <p className="text-xs text-[#525252] text-center mb-6 uppercase tracking-wider">Statistics</p>
 
-        <div className="grid grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-4 gap-3 mb-6">
           <div className="text-center">
-            <p className="text-2xl font-bold">{stats.gamesPlayed}</p>
-            <p className="text-xs text-gray-400">Played</p>
+            <p className="text-2xl font-bold text-[#e5e5e5]">{stats.gamesPlayed}</p>
+            <p className="text-[10px] text-[#525252] uppercase tracking-wider">Played</p>
           </div>
           <div className="text-center">
-            <p className="text-2xl font-bold">{winRate}%</p>
-            <p className="text-xs text-gray-400">Win %</p>
+            <p className="text-2xl font-bold text-[#e5e5e5]">{winRate}%</p>
+            <p className="text-[10px] text-[#525252] uppercase tracking-wider">Win %</p>
           </div>
           <div className="text-center">
-            <p className="text-2xl font-bold">{stats.currentStreak}</p>
-            <p className="text-xs text-gray-400">Streak</p>
+            <p className="text-2xl font-bold text-[#e5e5e5]">{stats.currentStreak}</p>
+            <p className="text-[10px] text-[#525252] uppercase tracking-wider">Streak</p>
           </div>
           <div className="text-center">
-            <p className="text-2xl font-bold">{stats.maxStreak}</p>
-            <p className="text-xs text-gray-400">Max</p>
+            <p className="text-2xl font-bold text-[#e5e5e5]">{stats.maxStreak}</p>
+            <p className="text-[10px] text-[#525252] uppercase tracking-wider">Best</p>
           </div>
         </div>
 
-        <div className="text-center mb-6 p-4 bg-gray-700 rounded-lg">
-          <p className="text-sm text-gray-400">Average Rarity Score</p>
-          <p className="text-3xl font-bold text-purple-400">{avgRarity}</p>
+        <div className="text-center mb-6 py-4 bg-white/[0.03] rounded-lg">
+          <p className="text-xs text-[#525252] uppercase tracking-wider mb-1">Avg Rarity</p>
+          <p className="text-2xl font-bold text-[#d4af37]">{avgRarity}</p>
         </div>
 
         <button
           onClick={onClose}
-          className="w-full py-3 bg-gray-600 rounded-lg font-semibold hover:bg-gray-500"
+          className="w-full py-2.5 bg-white/[0.05] hover:bg-white/[0.08] rounded-lg text-sm text-[#e5e5e5] transition-colors"
         >
           Close
         </button>

@@ -98,13 +98,28 @@ export function useGameState(dailyGrid: DailyGrid) {
 
   // Save state changes to localStorage
   useEffect(() => {
-    setSavedState({
+    const savedData = {
       grid: state.grid.map(row => row.map(movie => movie?.id || null)),
       usedMovies: Array.from(state.usedMovies),
       guessesRemaining: state.guessesRemaining,
       cellHints: state.cellHints,
-    })
-  }, [state, setSavedState])
+    }
+    setSavedState(savedData)
+
+    // Also save to a generic key with date for tracking on home page
+    try {
+      localStorage.setItem('immaculate-grid-state', JSON.stringify({
+        ...savedData,
+        date: dailyGrid.date,
+        isComplete: state.isComplete,
+        score: {
+          correct: state.grid.flat().filter(Boolean).length,
+        },
+      }))
+    } catch {
+      // ignore
+    }
+  }, [state, setSavedState, dailyGrid.date])
 
   const selectCell = useCallback((row: number, col: number) => {
     if (state.isComplete || state.grid[row][col] !== null) return

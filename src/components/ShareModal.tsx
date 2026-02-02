@@ -39,14 +39,21 @@ export function ShareModal({ grid, score, onClose }: ShareModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
-      <div className="bg-gray-800 rounded-xl p-6 max-w-sm w-full">
-        <h2 className="text-xl font-bold mb-4 text-center">
+    <div
+      className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+      onClick={onClose}
+    >
+      <div
+        className="bg-[#141414] rounded-xl p-6 max-w-sm w-full border border-white/[0.08]"
+        onClick={e => e.stopPropagation()}
+      >
+        <h2 className="text-xl font-semibold text-[#e5e5e5] text-center mb-1">
           {score.correct === 9 ? '🎉 Perfect!' : 'Game Over'}
         </h2>
+        <p className="text-xs text-[#525252] text-center mb-6 uppercase tracking-wider">Results</p>
 
-        <div className="text-center mb-4">
-          <div className="text-4xl mb-2">
+        <div className="text-center mb-6">
+          <div className="text-4xl mb-4 leading-tight">
             {grid.map((row, i) => (
               <div key={i}>
                 {row.map((cell, j) => (
@@ -55,24 +62,24 @@ export function ShareModal({ grid, score, onClose }: ShareModalProps) {
               </div>
             ))}
           </div>
-          <p className="text-lg">
+          <p className="text-lg text-[#e5e5e5]">
             Score: <span className="font-bold">{score.correct}/9</span>
           </p>
-          <p className="text-gray-400">
-            Rarity: <span className="font-semibold text-purple-400">{score.rarity}</span>
+          <p className="text-[#737373]">
+            Rarity: <span className="font-semibold text-[#d4af37]">{score.rarity}</span>
           </p>
         </div>
 
         <div className="flex gap-3">
           <button
             onClick={handleShare}
-            className="flex-1 py-3 bg-green-600 rounded-lg font-semibold hover:bg-green-500"
+            className="flex-1 py-3 bg-[#d4af37] text-black rounded-lg font-semibold hover:bg-[#e5c349] transition-colors"
           >
             {copied ? 'Copied!' : 'Share'}
           </button>
           <button
             onClick={onClose}
-            className="flex-1 py-3 bg-gray-600 rounded-lg font-semibold hover:bg-gray-500"
+            className="flex-1 py-3 bg-white/[0.05] hover:bg-white/[0.08] rounded-lg font-semibold text-[#e5e5e5] transition-colors"
           >
             Close
           </button>

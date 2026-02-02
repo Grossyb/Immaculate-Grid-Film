@@ -22,12 +22,12 @@ export function generateShareText(
     )
     .join('\n')
 
-  return `Immaculate Grid: Movies #${puzzleNumber} 🎬
+  return `Co-Stars #${puzzleNumber} 🎬
 
 ${emojiGrid}
 
 Score: ${score.correct}/9
 Rarity: ${score.rarity}
 
-https://immaculate-grid-film.vercel.app`
+filmgames.app`
 }

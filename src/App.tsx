@@ -1,130 +1,21 @@
-import { useState, useEffect } from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Analytics } from '@vercel/analytics/react'
-import { Grid } from './components/Grid'
-import { MovieSearch } from './components/MovieSearch'
-import { GuessCounter } from './components/GuessCounter'
-import { ShareModal } from './components/ShareModal'
-import { StatsModal } from './components/StatsModal'
-import { AdBanner } from './components/AdBanner'
-import { generateDailyGrid, getPuzzleNumber } from './lib/grid-generator'
-import { useGameState } from './hooks/useGameState'
-import { useLocalStorage } from './hooks/useLocalStorage'
-import type { Movie } from './lib/types'
+import { HomePage } from './components/home/HomePage'
+import { CoStarsPage } from './pages/CoStarsPage'
+import { FilmographyPage } from './pages/FilmographyPage'
+import { SixDegreesPage } from './pages/SixDegreesPage'
 
 function App() {
-  const [showShare, setShowShare] = useState(false)
-  const [showStats, setShowStats] = useState(false)
-
-  const dailyGrid = generateDailyGrid()
-  const {
-    grid,
-    selectedCell,
-    guessesRemaining,
-    isComplete,
-    score,
-    selectCell,
-    makeGuess,
-    useHint,
-    currentCellHint,
-  } = useGameState(dailyGrid)
-
-  const [stats, setStats] = useLocalStorage('immaculate-grid-stats', {
-    gamesPlayed: 0,
-    gamesWon: 0,
-    currentStreak: 0,
-    maxStreak: 0,
-    totalRarity: 0,
-  })
-
-  useEffect(() => {
-    if (isComplete) {
-      const won = score.correct === 9
-      setStats(prev => ({
-        gamesPlayed: prev.gamesPlayed + 1,
-        gamesWon: prev.gamesWon + (won ? 1 : 0),
-        currentStreak: won ? prev.currentStreak + 1 : 0,
-        maxStreak: won ? Math.max(prev.maxStreak, prev.currentStreak + 1) : prev.maxStreak,
-        totalRarity: prev.totalRarity + score.rarity,
-      }))
-      setShowShare(true)
-    }
-  }, [isComplete])
-
-  const handleMovieSelect = (movie: Movie) => {
-    if (selectedCell) {
-      makeGuess(movie)
-    }
-  }
-
   return (
-    <div className="h-screen flex flex-col items-center p-2 sm:p-4 overflow-hidden">
-      <header className="mb-2 sm:mb-4 text-center">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-1">Immaculate Grid #{getPuzzleNumber()}</h1>
-        <p className="text-xs sm:text-sm text-gray-500">Movies Edition</p>
-        <p className="text-gray-400 text-xs mt-1 hidden sm:block">A new puzzle every day. Find movies connecting the actors.</p>
-      </header>
-
-      <div className="flex gap-4 mb-2 sm:mb-4">
-        <GuessCounter remaining={guessesRemaining} />
-        <button
-          onClick={() => setShowStats(true)}
-          className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-700 rounded hover:bg-gray-600 text-sm sm:text-base"
-        >
-          Stats
-        </button>
-      </div>
-
-      <Grid
-        rowActors={dailyGrid.rowActors}
-        colActors={dailyGrid.colActors}
-        grid={grid}
-        selectedCell={selectedCell}
-        onCellClick={selectCell}
-        isComplete={isComplete}
-      />
-
-      {selectedCell && !isComplete && (
-        <MovieSearch
-          onSelect={handleMovieSelect}
-          rowActor={dailyGrid.rowActors[selectedCell[0]]}
-          colActor={dailyGrid.colActors[selectedCell[1]]}
-          onUseHint={useHint}
-          cellHint={currentCellHint}
-        />
-      )}
-
-      {isComplete && (
-        <div className="mt-6 flex gap-4">
-          <button
-            onClick={() => setShowShare(true)}
-            className="px-6 py-3 bg-green-600 rounded-lg font-semibold hover:bg-green-500"
-          >
-            Share Results
-          </button>
-        </div>
-      )}
-
-      {showShare && (
-        <ShareModal
-          grid={grid}
-          score={score}
-          onClose={() => setShowShare(false)}
-        />
-      )}
-
-      {showStats && (
-        <StatsModal
-          stats={stats}
-          onClose={() => setShowStats(false)}
-        />
-      )}
-
-      <div className="mt-auto w-full">
-        <AdBanner />
-      </div>
-
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/costars" element={<CoStarsPage />} />
+        <Route path="/filmography" element={<FilmographyPage />} />
+        <Route path="/sixdegrees" element={<SixDegreesPage />} />
+      </Routes>
       <Analytics />
-    </div>
+    </BrowserRouter>
   )
 }
 

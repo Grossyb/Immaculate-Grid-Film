@@ -113,13 +113,13 @@ export function getPuzzleNumber(dateString?: string): number {
   return Math.max(1, diffDays + 1)
 }
 
-// Progressive difficulty: start with most connected actors, expand pool over time
+// Progressive difficulty: start with well-connected actors, expand pool over time
+// Using larger pools from the start for more variety
 function getActorPoolSize(puzzleNumber: number): number {
-  if (puzzleNumber <= 7) return 30      // Week 1: easiest
-  if (puzzleNumber <= 14) return 60     // Week 2
-  if (puzzleNumber <= 30) return 100    // Month 1
-  if (puzzleNumber <= 60) return 150    // Month 2
-  return data.actors.length             // After 2 months: full pool
+  if (puzzleNumber <= 7) return 100     // Week 1: top 100 most connected
+  if (puzzleNumber <= 14) return 150    // Week 2
+  if (puzzleNumber <= 30) return 200    // Month 1
+  return data.actors.length             // After month 1: full pool (254)
 }
 
 export function getSharedMovies(actor1Id: number, actor2Id: number): number[] {
