@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import {
   generateDailySixDegrees,
   getActorMovies,
@@ -11,7 +11,6 @@ import { markGamePlayedToday } from '../lib/stats'
 import type { Actor, Movie } from '../lib/types'
 
 export function SixDegreesPage() {
-  const navigate = useNavigate()
   const puzzle = useMemo(() => generateDailySixDegrees(), [])
   const {
     path,
@@ -58,10 +57,6 @@ export function SixDegreesPage() {
     }
   }, [isComplete, won, hasTrackedCompletion, stepsTaken])
 
-  const handleGoHome = () => {
-    navigate('/')
-  }
-
   // Get available options based on current state
   const availableMovies = useMemo(() => {
     if (!needsMovie || !currentActor) return []
@@ -93,7 +88,7 @@ export function SixDegreesPage() {
     setSearchQuery('')
   }
 
-  const shareText = `Six Degrees #${puzzle.puzzleNumber}\n🔗 Connected in ${stepsTaken} steps!\n\nPlay at: filmgames.app`
+  const shareText = `Six Degrees #${puzzle.puzzleNumber}\n🔗 Connected in ${stepsTaken} steps!\n\nPlay at: dailyrewind.app`
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -118,13 +113,13 @@ export function SixDegreesPage() {
     <div className="min-h-screen flex flex-col items-center p-4 sm:p-6">
       {/* Back to Home */}
       <div className="w-full max-w-xl mb-4 flex items-center justify-between">
-        <button
-          onClick={handleGoHome}
+        <Link
+          to="/"
           className="inline-flex items-center gap-2 px-3 py-2 text-sm text-[#a3a3a3] hover:text-[#e5e5e5] transition-colors rounded-lg hover:bg-white/[0.05]"
         >
           <span className="text-lg">←</span>
           <span>Home</span>
-        </button>
+        </Link>
         <button
           onClick={() => setShowStats(true)}
           className="inline-flex items-center gap-1.5 px-4 py-2 text-sm text-[#a3a3a3] hover:text-[#e5e5e5] bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] rounded-lg transition-all"

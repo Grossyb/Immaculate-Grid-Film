@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { generateDailyFilmography, searchActors } from '../lib/filmography-generator'
 import { useFilmographyState } from '../hooks/useFilmographyState'
 import { useLocalStorage } from '../hooks/useLocalStorage'
@@ -7,7 +7,6 @@ import { markGamePlayedToday } from '../lib/stats'
 import type { Actor } from '../lib/types'
 
 export function FilmographyPage() {
-  const navigate = useNavigate()
   const puzzle = useMemo(() => generateDailyFilmography(), [])
   const {
     guesses,
@@ -50,10 +49,6 @@ export function FilmographyPage() {
     }
   }, [isComplete, won, hasTrackedCompletion])
 
-  const handleGoHome = () => {
-    navigate('/')
-  }
-
   const searchResults = useMemo(() => {
     return searchActors(searchQuery)
   }, [searchQuery])
@@ -64,7 +59,7 @@ export function FilmographyPage() {
     setShowResults(false)
   }
 
-  const shareText = `Filmography #${puzzle.puzzleNumber}\n${won ? `🎭 Got it in ${guesses.length}!` : '😔 Failed'}\n\nPlay at: filmgames.app`
+  const shareText = `Filmography #${puzzle.puzzleNumber}\n${won ? `🎭 Got it in ${guesses.length}!` : '😔 Failed'}\n\nPlay at: dailyrewind.app`
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -88,13 +83,13 @@ export function FilmographyPage() {
     <div className="min-h-screen flex flex-col items-center p-4 sm:p-6">
       {/* Back to Home */}
       <div className="w-full max-w-xl mb-4 flex items-center justify-between">
-        <button
-          onClick={handleGoHome}
+        <Link
+          to="/"
           className="inline-flex items-center gap-2 px-3 py-2 text-sm text-[#a3a3a3] hover:text-[#e5e5e5] transition-colors rounded-lg hover:bg-white/[0.05]"
         >
           <span className="text-lg">←</span>
           <span>Home</span>
-        </button>
+        </Link>
         <button
           onClick={() => setShowStats(true)}
           className="inline-flex items-center gap-1.5 px-4 py-2 text-sm text-[#a3a3a3] hover:text-[#e5e5e5] bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] rounded-lg transition-all"

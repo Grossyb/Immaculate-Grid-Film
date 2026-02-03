@@ -29,5 +29,5 @@ ${emojiGrid}
 Score: ${score.correct}/9
 Rarity: ${score.rarity}
 
-filmgames.app`
+dailyrewind.app`
 }
