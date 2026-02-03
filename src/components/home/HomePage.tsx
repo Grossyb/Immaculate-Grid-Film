@@ -40,7 +40,7 @@ export function HomePage() {
       {/* Header */}
       <header className="mb-12 sm:mb-16 text-center">
         <h1 className="text-5xl sm:text-6xl font-bold tracking-tight text-[#e5e5e5] mb-3">
-          Film Games
+          Daily Rewind
         </h1>
         <p className="text-[#737373] text-base tracking-wide">A new puzzle every day</p>
       </header>

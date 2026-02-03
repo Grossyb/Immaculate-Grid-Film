@@ -86,8 +86,8 @@ export function getTodayDateString(): string {
 
 // Launch date - puzzle #1 starts here (year, month-1, day)
 const LAUNCH_YEAR = 2026
-const LAUNCH_MONTH = 1  // January (1-indexed for clarity)
-const LAUNCH_DAY = 29
+const LAUNCH_MONTH = 2  // February (1-indexed for clarity)
+const LAUNCH_DAY = 2
 
 export function getPuzzleNumber(dateString?: string): number {
   let year: number, month: number, day: number
