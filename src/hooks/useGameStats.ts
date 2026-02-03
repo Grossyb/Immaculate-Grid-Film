@@ -45,7 +45,7 @@ export function useGameStats() {
           const trackedKey = `costars-tracked-${today}`
           const wasTracked = localStorage.getItem(trackedKey)
           if (wasTracked) {
-            todayResult = { played: true, won: true } // If tracked, they completed it
+            todayResult = { played: true, won: JSON.parse(wasTracked) }
           }
 
           // Also check the game state

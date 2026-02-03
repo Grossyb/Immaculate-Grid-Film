@@ -41,7 +41,8 @@ export function markGamePlayedToday(gameType: GameType, won: boolean): void {
 
 export function getCoStarsStats(): PlayerStats {
   try {
-    const data = localStorage.getItem('immaculate-grid-stats')
+    // Use new 'costars-stats' key for accurate daily tracking
+    const data = localStorage.getItem('costars-stats')
     if (data) {
       return JSON.parse(data)
     }

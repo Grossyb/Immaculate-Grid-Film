@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Grid } from '../components/Grid'
 import { MovieSearch } from '../components/MovieSearch'
@@ -15,7 +15,8 @@ export function CoStarsPage() {
   const [showShare, setShowShare] = useState(false)
   const [showStats, setShowStats] = useState(false)
 
-  const dailyGrid = generateDailyGrid()
+  // Memoize to prevent re-generation on every render
+  const dailyGrid = useMemo(() => generateDailyGrid(), [])
   const {
     grid,
     selectedCell,
@@ -28,7 +29,9 @@ export function CoStarsPage() {
     currentCellHint,
   } = useGameState(dailyGrid)
 
-  const [stats, setStats] = useLocalStorage('immaculate-grid-stats', {
+  // Use new key 'costars-stats' for accurate daily tracking
+  // Old 'immaculate-grid-stats' had bugs that inflated numbers
+  const [stats, setStats] = useLocalStorage('costars-stats', {
     gamesPlayed: 0,
     gamesWon: 0,
     currentStreak: 0,
@@ -62,9 +65,9 @@ export function CoStarsPage() {
     }
   }
 
-  const handleGoHome = () => {
+  const handleGoHome = useCallback(() => {
     navigate('/')
-  }
+  }, [navigate])
 
   return (
     <div className="min-h-screen flex flex-col items-center p-3 sm:p-6">
