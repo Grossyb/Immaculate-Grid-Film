@@ -1,100 +1,98 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0f172a"/>
-      <stop offset="100%" style="stop-color:#1e293b"/>
+    <!-- Gold gradient for accents -->
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#d4af37"/>
+      <stop offset="100%" style="stop-color:#e5c349"/>
     </linearGradient>
-    <linearGradient id="cellGreen" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#059669"/>
-      <stop offset="100%" style="stop-color:#10b981"/>
-    </linearGradient>
-    <linearGradient id="cellBlue" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#2563eb"/>
-      <stop offset="100%" style="stop-color:#3b82f6"/>
+    <!-- Subtle card background -->
+    <linearGradient id="cardBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a1a"/>
+      <stop offset="100%" style="stop-color:#141414"/>
     </linearGradient>
   </defs>
 
-  <!-- Background -->
-  <rect width="1200" height="630" fill="url(#bg)"/>
+  <!-- Background - matches app's #0a0a0a -->
+  <rect width="1200" height="630" fill="#0a0a0a"/>
 
-  <!-- Decorative film strip elements -->
-  <g opacity="0.1">
-    <rect x="0" y="50" width="1200" height="30" fill="#fff"/>
-    <rect x="0" y="550" width="1200" height="30" fill="#fff"/>
-    <!-- Film perforations top -->
-    <rect x="50" y="55" width="20" height="20" rx="3" fill="#0f172a"/>
-    <rect x="150" y="55" width="20" height="20" rx="3" fill="#0f172a"/>
-    <rect x="250" y="55" width="20" height="20" rx="3" fill="#0f172a"/>
-    <rect x="350" y="55" width="20" height="20" rx="3" fill="#0f172a"/>
-    <rect x="450" y="55" width="20" height="20" rx="3" fill="#0f172a"/>
-    <rect x="550" y="55" width="20" height="20" rx="3" fill="#0f172a"/>
-    <rect x="650" y="55" width="20" height="20" rx="3" fill="#0f172a"/>
-    <rect x="750" y="55" width="20" height="20" rx="3" fill="#0f172a"/>
-    <rect x="850" y="55" width="20" height="20" rx="3" fill="#0f172a"/>
-    <rect x="950" y="55" width="20" height="20" rx="3" fill="#0f172a"/>
-    <rect x="1050" y="55" width="20" height="20" rx="3" fill="#0f172a"/>
-    <!-- Film perforations bottom -->
-    <rect x="50" y="555" width="20" height="20" rx="3" fill="#0f172a"/>
-    <rect x="150" y="555" width="20" height="20" rx="3" fill="#0f172a"/>
-    <rect x="250" y="555" width="20" height="20" rx="3" fill="#0f172a"/>
-    <rect x="350" y="555" width="20" height="20" rx="3" fill="#0f172a"/>
-    <rect x="450" y="555" width="20" height="20" rx="3" fill="#0f172a"/>
-    <rect x="550" y="555" width="20" height="20" rx="3" fill="#0f172a"/>
-    <rect x="650" y="555" width="20" height="20" rx="3" fill="#0f172a"/>
-    <rect x="750" y="555" width="20" height="20" rx="3" fill="#0f172a"/>
-    <rect x="850" y="555" width="20" height="20" rx="3" fill="#0f172a"/>
-    <rect x="950" y="555" width="20" height="20" rx="3" fill="#0f172a"/>
-    <rect x="1050" y="555" width="20" height="20" rx="3" fill="#0f172a"/>
+  <!-- Subtle film reel decoration - top left -->
+  <g opacity="0.06" transform="translate(80, 80)">
+    <circle cx="0" cy="0" r="60" fill="none" stroke="#fff" stroke-width="3"/>
+    <circle cx="0" cy="0" r="45" fill="none" stroke="#fff" stroke-width="2"/>
+    <circle cx="0" cy="0" r="15" fill="#fff"/>
+    <circle cx="0" cy="-30" r="8" fill="#0a0a0a"/>
+    <circle cx="26" cy="15" r="8" fill="#0a0a0a"/>
+    <circle cx="-26" cy="15" r="8" fill="#0a0a0a"/>
   </g>
 
-  <!-- Title -->
-  <text x="600" y="130" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="64" font-weight="bold" fill="#f8fafc">
-    Immaculate Grid
-  </text>
-  <text x="600" y="175" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="32" fill="#94a3b8">
-    Movies Edition
-  </text>
-
-  <!-- 3x3 Grid centered -->
-  <g transform="translate(420, 210)">
-    <!-- Row 1 -->
-    <rect x="0" y="0" width="110" height="110" rx="12" fill="url(#cellGreen)"/>
-    <rect x="120" y="0" width="110" height="110" rx="12" fill="url(#cellGreen)"/>
-    <rect x="240" y="0" width="110" height="110" rx="12" fill="url(#cellBlue)"/>
-
-    <!-- Row 2 -->
-    <rect x="0" y="120" width="110" height="110" rx="12" fill="url(#cellGreen)"/>
-    <rect x="120" y="120" width="110" height="110" rx="12" fill="#374151"/>
-    <rect x="240" y="120" width="110" height="110" rx="12" fill="url(#cellGreen)"/>
-
-    <!-- Row 3 -->
-    <rect x="0" y="240" width="110" height="110" rx="12" fill="url(#cellGreen)"/>
-    <rect x="120" y="240" width="110" height="110" rx="12" fill="url(#cellGreen)"/>
-    <rect x="240" y="240" width="110" height="110" rx="12" fill="url(#cellGreen)"/>
-
-    <!-- Question mark in unfilled cell -->
-    <text x="175" y="195" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="48" fill="#6b7280">?</text>
-
-    <!-- Checkmarks in filled cells -->
-    <g fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M35 55 L50 70 L75 40"/>
-      <path d="M155 55 L170 70 L195 40"/>
-      <path d="M275 55 L290 70 L315 40"/>
-      <path d="M35 175 L50 190 L75 160"/>
-      <path d="M275 175 L290 190 L315 160"/>
-      <path d="M35 295 L50 310 L75 280"/>
-      <path d="M155 295 L170 310 L195 280"/>
-      <path d="M275 295 L290 310 L315 280"/>
-    </g>
+  <!-- Subtle film reel decoration - bottom right -->
+  <g opacity="0.06" transform="translate(1120, 550)">
+    <circle cx="0" cy="0" r="60" fill="none" stroke="#fff" stroke-width="3"/>
+    <circle cx="0" cy="0" r="45" fill="none" stroke="#fff" stroke-width="2"/>
+    <circle cx="0" cy="0" r="15" fill="#fff"/>
+    <circle cx="0" cy="-30" r="8" fill="#0a0a0a"/>
+    <circle cx="26" cy="15" r="8" fill="#0a0a0a"/>
+    <circle cx="-26" cy="15" r="8" fill="#0a0a0a"/>
   </g>
+
+  <!-- Main title -->
+  <text x="600" y="180" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="bold" fill="#e5e5e5">
+    Daily Rewind
+  </text>
 
   <!-- Tagline -->
-  <text x="600" y="520" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="26" fill="#cbd5e1">
-    Name movies that connect pairs of actors
+  <text x="600" y="230" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#737373">
+    A new puzzle every day
   </text>
 
-  <!-- Play daily text -->
-  <text x="600" y="560" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="#64748b">
-    A new puzzle every day
+  <!-- Three game cards -->
+  <g transform="translate(150, 280)">
+    <!-- Co-Stars Card -->
+    <rect x="0" y="0" width="260" height="200" rx="16" fill="url(#cardBg)" stroke="#333" stroke-width="1"/>
+    <text x="130" y="45" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="24" font-weight="600" fill="#e5e5e5">Co-Stars</text>
+    <!-- Actor circles -->
+    <g transform="translate(130, 100)">
+      <circle cx="-50" cy="0" r="28" fill="#333" stroke="#444" stroke-width="2"/>
+      <circle cx="0" cy="0" r="28" fill="#333" stroke="#444" stroke-width="2"/>
+      <circle cx="50" cy="0" r="28" fill="#333" stroke="#444" stroke-width="2"/>
+    </g>
+    <text x="130" y="165" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#525252">Find movies connecting actors</text>
+  </g>
+
+  <g transform="translate(470, 280)">
+    <!-- Filmography Card -->
+    <rect x="0" y="0" width="260" height="200" rx="16" fill="url(#cardBg)" stroke="#333" stroke-width="1"/>
+    <text x="130" y="45" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="24" font-weight="600" fill="#e5e5e5">Filmography</text>
+    <!-- Movie poster placeholders -->
+    <g transform="translate(55, 65)">
+      <rect x="0" y="0" width="40" height="56" rx="4" fill="#333" stroke="#444" stroke-width="1"/>
+      <rect x="55" y="0" width="40" height="56" rx="4" fill="#333" stroke="#444" stroke-width="1"/>
+      <rect x="110" y="0" width="40" height="56" rx="4" fill="#333" stroke="#444" stroke-width="1"/>
+      <text x="130" y="38" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="url(#gold)">?</text>
+    </g>
+    <text x="130" y="165" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#525252">Guess the actor from films</text>
+  </g>
+
+  <g transform="translate(790, 280)">
+    <!-- Six Degrees Card -->
+    <rect x="0" y="0" width="260" height="200" rx="16" fill="url(#cardBg)" stroke="#333" stroke-width="1"/>
+    <text x="130" y="45" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="24" font-weight="600" fill="#e5e5e5">Six Degrees</text>
+    <!-- Connection visualization -->
+    <g transform="translate(130, 100)">
+      <circle cx="-60" cy="0" r="24" fill="#333" stroke="#10b981" stroke-width="2"/>
+      <circle cx="60" cy="0" r="24" fill="#333" stroke="url(#gold)" stroke-width="2"/>
+      <line x1="-30" y1="0" x2="30" y2="0" stroke="#444" stroke-width="2" stroke-dasharray="6,4"/>
+      <circle cx="-10" cy="0" r="4" fill="#525252"/>
+      <circle cx="10" cy="0" r="4" fill="#525252"/>
+    </g>
+    <text x="130" y="165" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#525252">Connect two actors via movies</text>
+  </g>
+
+  <!-- Bottom accent line -->
+  <rect x="450" y="530" width="300" height="3" rx="1.5" fill="url(#gold)" opacity="0.6"/>
+
+  <!-- URL -->
+  <text x="600" y="580" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="18" fill="#525252">
+    dailyrewind.app
   </text>
 </svg>
