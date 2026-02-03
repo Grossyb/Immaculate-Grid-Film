@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Grid } from '../components/Grid'
 import { MovieSearch } from '../components/MovieSearch'
 import { GuessCounter } from '../components/GuessCounter'
@@ -11,8 +11,16 @@ import { useLocalStorage } from '../hooks/useLocalStorage'
 import type { Movie } from '../lib/types'
 
 export function CoStarsPage() {
+  const location = useLocation()
   const [showShare, setShowShare] = useState(false)
   const [showStats, setShowStats] = useState(false)
+
+  // Force navigation if we're on wrong path (debugging router issue)
+  useEffect(() => {
+    if (location.pathname !== '/costars') {
+      window.location.href = location.pathname
+    }
+  }, [location.pathname])
 
   // Memoize to prevent re-generation on every render
   const dailyGrid = useMemo(() => generateDailyGrid(), [])
