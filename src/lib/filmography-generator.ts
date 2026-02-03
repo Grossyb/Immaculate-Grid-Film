@@ -36,12 +36,12 @@ export function generateDailyFilmography(dateOverride?: string): FilmographyPuzz
   const actorIndex = Math.floor(random() * actorPool.length)
   const actor = actorPool[actorIndex]
 
-  // Get their movies sorted by popularity (most popular first)
+  // Get their movies sorted by year (most recent first)
   const movieIds = data.actorMovies[actor.id] || []
   const movies = movieIds
     .map(id => data.movies.find(m => m.id === id))
     .filter((m): m is Movie => m !== undefined)
-    .sort((a, b) => b.popularity - a.popularity)
+    .sort((a, b) => b.releaseYear - a.releaseYear)
     .slice(0, 10) // Show top 10 movies max
 
   return {

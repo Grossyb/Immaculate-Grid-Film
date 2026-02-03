@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import { Grid } from '../components/Grid'
 import { MovieSearch } from '../components/MovieSearch'
 import { GuessCounter } from '../components/GuessCounter'
@@ -11,7 +11,6 @@ import { useLocalStorage } from '../hooks/useLocalStorage'
 import type { Movie } from '../lib/types'
 
 export function CoStarsPage() {
-  const navigate = useNavigate()
   const [showShare, setShowShare] = useState(false)
   const [showStats, setShowStats] = useState(false)
 
@@ -65,21 +64,17 @@ export function CoStarsPage() {
     }
   }
 
-  const handleGoHome = useCallback(() => {
-    navigate('/')
-  }, [navigate])
-
   return (
     <div className="min-h-screen flex flex-col items-center p-3 sm:p-6">
       {/* Top bar with back link */}
       <div className="w-full max-w-2xl mb-4 flex items-center justify-between">
-        <button
-          onClick={handleGoHome}
+        <Link
+          to="/"
           className="inline-flex items-center gap-2 px-3 py-2 text-sm text-[#a3a3a3] hover:text-[#e5e5e5] transition-colors rounded-lg hover:bg-white/[0.05]"
         >
           <span className="text-lg">←</span>
           <span>Home</span>
-        </button>
+        </Link>
         <button
           onClick={() => setShowStats(true)}
           className="inline-flex items-center gap-1.5 px-4 py-2 text-sm text-[#a3a3a3] hover:text-[#e5e5e5] bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] rounded-lg transition-all"
